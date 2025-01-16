@@ -35,6 +35,7 @@ def main():
 
     # Get a compiled neural network
     model = get_model()
+    #model = get_model_2()
 
     # Fit model on training data
     model.fit(x_train, y_train, epochs=EPOCHS)
@@ -98,6 +99,33 @@ def get_model():
     model.add(layers.Flatten())  
     model.add(layers.Dense(128, activation="relu"))
     model.add(layers.Dropout(0.5))  
+
+    model.add(layers.Dense(NUM_CATEGORIES, activation="softmax"))
+
+    model.compile(
+        optimizer="adam",
+        loss="categorical_crossentropy",
+        metrics=["accuracy"]
+    )
+
+    return model
+
+def get_model_2():
+    model = Sequential()
+
+    model.add(layers.Conv2D(64, (5, 5), activation="relu", input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)))
+    model.add(layers.MaxPooling2D(pool_size=(2, 2)))
+    model.add(layers.Dropout(0.3))
+
+    model.add(layers.Conv2D(128, (3, 3), activation="relu"))
+    model.add(layers.MaxPooling2D(pool_size=(2, 2)))
+
+    model.add(layers.Conv2D(256, (3, 3), activation="relu"))
+    model.add(layers.MaxPooling2D(pool_size=(2, 2)))
+
+    model.add(layers.Flatten())
+    model.add(layers.Dense(512, activation="relu"))
+    model.add(layers.Dropout(0.5))
 
     model.add(layers.Dense(NUM_CATEGORIES, activation="softmax"))
 
